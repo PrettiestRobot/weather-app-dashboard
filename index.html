@@ -8,7 +8,32 @@
     <link rel="stylesheet" href="./assets/styles/style.css">
 </head>
 <body>
-    
+    <nav>
+        <h2>Weather Dashboard</h2>
+    </nav>
+    <main>
+        <section class="weather-container">
+            <div class="main-forcast-card"></div>
+            <div class="future-forecast-container">
+                <h4>5-day-forcast</h4>
+                <ul class="forcast-list">
+
+                </ul>
+            </div>
+
+        </section>
+        <aside class="seach-container">
+            <form class="search-form">
+                <label for="searchbar" >Search for a City:</label>
+                <input id="searchbar" name="searchbar" type="text" value="Seattle">
+                <input type="submit" value="Search">
+            </form>
+            <hr>
+            <section class="search-history-container">
+
+            </section>
+        </aside>
+    </main>
     <script src="./assets/scripts/script.js"></script>
 </body>
 </html>
