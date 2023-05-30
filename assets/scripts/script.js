@@ -5,7 +5,7 @@ const windCurrent = document.querySelector(".wind-current");
 const humidityCurrent = document.querySelector(".humidity-current");
 const cityInfo = document.querySelector(".city-info");
 const cityIcon = document.querySelector(".city-info-icon");
-
+const forcastList = document.querySelector(".forcast-list");
 
 const apiKey = "5801529235171737e0bd3af3fc3c74fc";
 
@@ -19,12 +19,13 @@ submitBtn.addEventListener("click", function (event) {
   getWeather();
 });
 
+// Format the date from the api into something more presentable
 function formatDate(inputDate) {
   const date = new Date(inputDate);
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  const formattedDate = `(${day}/${month.toString().padStart(2, '0')}/${year})`;
+  const formattedDate = `(${day}/${month.toString().padStart(2, "0")}/${year})`;
   return formattedDate;
 }
 
@@ -45,18 +46,46 @@ function getWeather() {
         .then(function (data) {
           console.log(data);
           console.log(data.city.name);
-          console.log()
+          console.log();
           let formattedDate = formatDate(data.list[0].dt_txt);
           cityIcon.src = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`;
           let cityText = data.city.name;
           cityInfo.textContent = `${cityText} ${formattedDate}`;
           tempCurrent.textContent = data.list[0].main.temp + "\u00B0" + "F";
           windCurrent.textContent = data.list[0].wind.speed + " Mph";
-          humidityCurrent.textContent = data.list[0].main.humidity +" %";
+          humidityCurrent.textContent = data.list[0].main.humidity + " %";
+          createCards(data);
         });
     });
 }
 
-// function createCard (data) {
-
-// }
+// Create daily forcast cards
+function createCards(data) {
+  for (i = 8; i < 40; i += 8) {
+    // create card elements
+    const newCard = document.createElement("li");
+    newCard.classList.add("forcast-card");
+    forcastList.appendChild(newCard);
+    const date = document.createElement("h5");
+    date.classList.add("card-date");
+    newCard.appendChild(date);
+    const cardIcon = document.createElement("img");
+    cardIcon.classList.add("card-icon");
+    newCard.appendChild(cardIcon);
+    const temp = document.createElement("p");
+    temp.classList.add("card-temp");
+    newCard.appendChild(temp);
+    const wind = document.createElement("p");
+    wind.classList.add("card-wind");
+    newCard.appendChild(wind);
+    const humidity = document.createElement("h5");
+    humidity.classList.add("card-humidity");
+    newCard.appendChild(humidity);
+    // populate card
+    date.textContent = formatDate(data.list[i].dt_txt);
+    cardIcon.src = `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png`;
+    temp.textContent = data.list[i].main.temp + "\u00B0" + "F";
+    wind.textContent = data.list[i].wind.speed + " Mph";
+    humidity.textContent = data.list[i].main.humidity + " %";
+  }
+}
