@@ -6,17 +6,24 @@ const humidityCurrent = document.querySelector(".humidity-current");
 const cityInfo = document.querySelector(".city-info");
 const cityIcon = document.querySelector(".city-info-icon");
 const forcastList = document.querySelector(".forcast-list");
+const searchHistory = document.querySelector(".search-history-container");
+const historyBtn = document.querySelector(".history-btn");
 
 const apiKey = "5801529235171737e0bd3af3fc3c74fc";
 
 let weatherUrl = "";
 let geocodeUrl = "";
+let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+localStorage.setItem('searchHistory', JSON.stringify(history));
+populateSearchHistory();
 
 submitBtn.addEventListener("click", function (event) {
   event.preventDefault();
   let city = searchbar.value;
   geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
   getWeather();
+  addToLocalStorage(city);
+  populateSearchHistory();
 });
 
 // Format the date from the api into something more presentable
@@ -61,6 +68,9 @@ function getWeather() {
 
 // Create daily forcast cards
 function createCards(data) {
+    while (forcastList.firstChild) {
+      forcastList.removeChild(forcastList.firstChild);
+    }
   for (i = 8; i < 40; i += 8) {
     // create card elements
     const newCard = document.createElement("li");
@@ -88,4 +98,33 @@ function createCards(data) {
     wind.textContent = data.list[i].wind.speed + " Mph";
     humidity.textContent = data.list[i].main.humidity + " %";
   }
+}
+
+function addToLocalStorage(city) {
+  let localSearchHistory =
+    JSON.parse(localStorage.getItem("searchHistory")) || [];
+  if (!localSearchHistory.includes(city)) {
+    localSearchHistory.push(city);
+  }
+  localStorage.setItem("searchHistory", JSON.stringify(localSearchHistory));
+}
+
+function populateSearchHistory() {
+  while (searchHistory.firstChild) {
+    searchHistory.removeChild(searchHistory.firstChild);
+  }
+  history = JSON.parse(localStorage.getItem("searchHistory"));
+    for (let i = 0; i < history.length; i++) {
+      const newBtn = document.createElement("button");
+      newBtn.classList.add("btn", "history-btn");
+      searchHistory.appendChild(newBtn);
+      newBtn.textContent = history[i];
+      newBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        let city = this.textContent;
+        geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+        getWeather();
+        populateSearchHistory();
+      });
+    }
 }
