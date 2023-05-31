@@ -21,7 +21,7 @@ submitBtn.addEventListener("click", function (event) {
   event.preventDefault();
   if (searchbar.value) {
     let city = searchbar.value;
-    geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+    geocodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
     getWeather();
     addToLocalStorage(city);
     populateSearchHistory();
