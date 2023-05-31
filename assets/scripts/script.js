@@ -126,7 +126,7 @@ function populateSearchHistory() {
     newBtn.addEventListener("click", function (event) {
       event.preventDefault();
       let city = this.textContent;
-      geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+      geocodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
       getWeather();
       populateSearchHistory();
     });
