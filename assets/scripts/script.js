@@ -5,7 +5,7 @@ const windCurrent = document.querySelector(".wind-current");
 const humidityCurrent = document.querySelector(".humidity-current");
 const cityInfo = document.querySelector(".city-info");
 const cityIcon = document.querySelector(".city-info-icon");
-const forcastList = document.querySelector(".forcast-list");
+const forecastList = document.querySelector(".forecast-list");
 const searchHistory = document.querySelector(".search-history-container");
 const historyBtn = document.querySelector(".history-btn");
 
@@ -14,16 +14,20 @@ const apiKey = "5801529235171737e0bd3af3fc3c74fc";
 let weatherUrl = "";
 let geocodeUrl = "";
 let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
-localStorage.setItem('searchHistory', JSON.stringify(history));
+localStorage.setItem("searchHistory", JSON.stringify(history));
 populateSearchHistory();
 
 submitBtn.addEventListener("click", function (event) {
   event.preventDefault();
-  let city = searchbar.value;
-  geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
-  getWeather();
-  addToLocalStorage(city);
-  populateSearchHistory();
+  if (searchbar.value) {
+    let city = searchbar.value;
+    geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+    getWeather();
+    addToLocalStorage(city);
+    populateSearchHistory();
+  } else {
+    alert("Please ente a city into the search field");
+  }
 });
 
 // Format the date from the api into something more presentable
@@ -66,16 +70,16 @@ function getWeather() {
     });
 }
 
-// Create daily forcast cards
+// Create daily forecast cards
 function createCards(data) {
-    while (forcastList.firstChild) {
-      forcastList.removeChild(forcastList.firstChild);
-    }
-  for (i = 8; i < 40; i += 8) {
+  while (forecastList.firstChild) {
+    forecastList.removeChild(forecastList.firstChild);
+  }
+  for (i = 7; i < 40; i += 8) {
     // create card elements
     const newCard = document.createElement("li");
-    newCard.classList.add("forcast-card");
-    forcastList.appendChild(newCard);
+    newCard.classList.add("forecast-card");
+    forecastList.appendChild(newCard);
     const date = document.createElement("h5");
     date.classList.add("card-date");
     newCard.appendChild(date);
@@ -88,7 +92,7 @@ function createCards(data) {
     const wind = document.createElement("p");
     wind.classList.add("card-wind");
     newCard.appendChild(wind);
-    const humidity = document.createElement("h5");
+    const humidity = document.createElement("p");
     humidity.classList.add("card-humidity");
     newCard.appendChild(humidity);
     // populate card
@@ -103,7 +107,7 @@ function createCards(data) {
 function addToLocalStorage(city) {
   let localSearchHistory =
     JSON.parse(localStorage.getItem("searchHistory")) || [];
-  if (!localSearchHistory.includes(city)) {
+  if (!localSearchHistory.includes(city) || city === "") {
     localSearchHistory.push(city);
   }
   localStorage.setItem("searchHistory", JSON.stringify(localSearchHistory));
@@ -114,17 +118,17 @@ function populateSearchHistory() {
     searchHistory.removeChild(searchHistory.firstChild);
   }
   history = JSON.parse(localStorage.getItem("searchHistory"));
-    for (let i = 0; i < history.length; i++) {
-      const newBtn = document.createElement("button");
-      newBtn.classList.add("btn", "history-btn");
-      searchHistory.appendChild(newBtn);
-      newBtn.textContent = history[i];
-      newBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        let city = this.textContent;
-        geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
-        getWeather();
-        populateSearchHistory();
-      });
-    }
+  for (let i = 0; i < history.length; i++) {
+    const newBtn = document.createElement("button");
+    newBtn.classList.add("btn", "history-btn");
+    searchHistory.appendChild(newBtn);
+    newBtn.textContent = history[i];
+    newBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      let city = this.textContent;
+      geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+      getWeather();
+      populateSearchHistory();
+    });
+  }
 }
