@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="./assets/styles/reset.css" />
     <link rel="stylesheet" href="./assets/styles/style.css" />
   </head>
   <body>
@@ -12,11 +13,20 @@
       <h2>Weather Dashboard</h2>
     </nav>
     <main>
+      <aside class="search-container">
+        <form class="search-form">
+          <label for="searchbar" class="search-bar-label"><h3>Search for a City:</h3></label>
+          <input id="searchbar" class="search-bar" name="searchbar" type="text" />
+          <input id="search-btn" class="btn" type="submit" value="Search" />
+        </form>
+        <hr />
+        <section class="search-history-container"></section>
+      </aside>
       <section class="weather-container">
-        <div class="main-forcast-card">
+        <div class="main-forecast-card">
           <div class="city-info-container">
             <h2 class="city-info"></h2>
-            <img class="city-info-icon" src="" />
+            <div class="icon-container"><img class="city-info-icon" src="" /></div>
           </div>
 
           <p>Temp: <span class="temp-current"></span></p>
@@ -24,19 +34,10 @@
           <p>Humidity: <span class="humidity-current"></span></p>
         </div>
         <div class="future-forecast-container">
-          <h4>5-day-forcast</h4>
-          <ul class="forcast-list"></ul>
+          <h3>5-Day Forcast:</h3>
+          <ul class="forecast-list"></ul>
         </div>
       </section>
-      <aside class="seach-container">
-        <form class="search-form">
-          <label for="searchbar">Search for a City:</label>
-          <input id="searchbar" name="searchbar" type="text" />
-          <input id="search-btn" type="submit" value="Search" />
-        </form>
-        <hr />
-        <section class="search-history-container"></section>
-      </aside>
     </main>
     <script src="./assets/scripts/script.js"></script>
   </body>
